@@ -35,28 +35,29 @@ from telebot import types
 bot = telebot.TeleBot('5468489458:AAHyRyPaeEL01MlVZKEL_X-SWSCOqF6qQlY')
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
-def start(m, res=False):
-    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = types.KeyboardButton('Челябинск')
-    item2 = types.KeyboardButton('Таров')
-    item3 = types.KeyboardButton('Москва')
-    markup.add(item1)
-    markup.add(item2)
-    markup.add(item3)
-    bot.send_message(m.chat.id, 'Привет! Я твой бот-гид Njmu, пожалуйста выбери город в котором хочешь найти интересные места.')
-# Получение сообщений от юзера
-@bot.message_handler(content_types=["text"])
-def handle_text(message, city='Таров'):
-    if message.text == "Таров":
-        city = "Таров"
-        bot.send_message(message.chat.id, 'теперь выбери районы')
-    elif city == "Таров" and message.text == "Центральный":
-        bot.send_message(message.chat.id, '1,2,3')
-    elif message.text == "Как дела?":
-        bot.send_message(message.chat.id, 'Лучше чем у тебя')
-    elif message.text == "Че такой злой?":
-        bot.send_message(message.chat.id, 'А че бы и нет')
-    else:
-        bot.send_message(message.chat.id, 'Умер, помянем')
+def handle_text(message):
+    keyboard = types.InlineKeyboardMarkup();  # наша клавиатура
+    key_citi1 = types.InlineKeyboardButton(text='Челябинск', callback_data='citi1');  # кнопка «Да»
+    keyboard.add(key_citi1);  # добавляем кнопку в клавиатуру
+    key_city2 = types.InlineKeyboardButton(text='Санкт-Петербург', callback_data='city2');
+    keyboard.add(key_city2);
+    key_city3 = types.InlineKeyboardButton(text='Москва', callback_data='city3');
+    keyboard.add(key_city3)
+    bot.send_message(message.from_user.id,'Привет! Я твой бот-гид Njmu, пожалуйста выбери город в котором хочешь найти интересные места.', reply_markup=keyboard)
+    @bot.callback_query_handler(func=lambda call: True)
+    def callback_worker(call):
+        if call.data == "citi1":
+            keyboard = types.InlineKeyboardMarkup();  # наша клавиатура
+            key_citi1 = types.InlineKeyboardButton(text='Центральный', callback_data='citi1');  # кнопка «Да»
+            keyboard.add(key_citi1);  # добавляем кнопку в клавиатуру
+            key_city2 = types.InlineKeyboardButton(text='Северо-Западный', callback_data='city2');
+            keyboard.add(key_city2);
+            key_city3 = types.InlineKeyboardButton(text='Ленинский', callback_data='city3');
+            keyboard.add(key_city3)
+            bot.send_message(call.message.chat.id, 'Вот весь список Районов в этом городе:', reply_markup=keyboard)
+        elif call.data == "city2":
+            bot.send_message(call.message.chat.id, '2');
+        elif call.data == 'city3':
+            bot.send_message(call.message.chat.id, '3');
 # Запускаем бота
 bot.polling(none_stop=True, interval=0)
