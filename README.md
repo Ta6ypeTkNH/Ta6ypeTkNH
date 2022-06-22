@@ -32,15 +32,21 @@ while True:
 import telebot
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5468489458:AAHyRyPaeEL01MlVZKEL_X-SWSCOqF6qQlY')
+
+city = ""
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
 def start(m, res=False):
-    bot.send_message(m.chat.id, 'Я на связи. Напиши мне что-нибудь )')
+    markup = types.ReplyKeyboardMarkup(realize_keyboard)
+    bot.send_message(m.chat.id, 'Привет! Я твой бот-гид Njmu, пожалуйста выбери город в котором хочешь найти интересные места.')
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
-def handle_text(message):
+def handle_text(message, city='Таров'):
     if message.text == "Таров":
-        bot.send_message(message.chat.id, 'Тарова чертила')
+        city = "Таров"
+        bot.send_message(message.chat.id, 'теперь выбери районы')
+    elif city == "Таров" and message.text == "Центральный":
+        bot.send_message(message.chat.id, '1,2,3')
     elif message.text == "Как дела?":
         bot.send_message(message.chat.id, 'Лучше чем у тебя')
     elif message.text == "Че такой злой?":
