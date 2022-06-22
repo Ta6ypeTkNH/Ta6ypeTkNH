@@ -30,14 +30,19 @@ while True:
 
 
 import telebot
+from telebot import types
 # Создаем экземпляр бота
 bot = telebot.TeleBot('5468489458:AAHyRyPaeEL01MlVZKEL_X-SWSCOqF6qQlY')
-
-city = ""
 # Функция, обрабатывающая команду /start
 @bot.message_handler(commands=["start"])
 def start(m, res=False):
-    markup = types.ReplyKeyboardMarkup(realize_keyboard)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    item1 = types.KeyboardButton('Челябинск')
+    item2 = types.KeyboardButton('Таров')
+    item3 = types.KeyboardButton('Москва')
+    markup.add(item1)
+    markup.add(item2)
+    markup.add(item3)
     bot.send_message(m.chat.id, 'Привет! Я твой бот-гид Njmu, пожалуйста выбери город в котором хочешь найти интересные места.')
 # Получение сообщений от юзера
 @bot.message_handler(content_types=["text"])
